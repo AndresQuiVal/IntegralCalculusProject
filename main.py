@@ -84,7 +84,7 @@ def get_integral(method : str):
     elif method == "trapezoid":
         res = get_trapezoid_rectangle(function_str, rectangles_number_int, 1, 500)
 
-    import pdb; pdb.set_trace()
+    print(res)
 
     # render data...
 
