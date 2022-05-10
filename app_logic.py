@@ -35,6 +35,9 @@ def get_left_rectangle(function, rectangles, first_limit, last_limit):
         return -1 # invalid base
     
     i = first_limit
+
+
+
     while i < last_limit:
         height = f(i, function)
         area_rectangles += base * height
