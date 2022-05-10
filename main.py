@@ -11,7 +11,6 @@ import numpy as np
 
 
 
-
 root = tk.Tk()
 
 # define esthetic of window
@@ -46,7 +45,7 @@ right_limit = tk.StringVar()
 rectangles_number = tk.StringVar()
 
 # grid control container
-tk.Button(main_area, text="Dont now how to enter function?", width=25, height=1, command=lambda:tutorial_function_enter()).pack()
+tk.Button(main_area, text="Dont know how to enter function?", width=25, height=1, command=lambda:tutorial_function_enter()).pack()
 
 main_entry = tk.Entry(main_area, textvariable=function)
 main_entry.insert(0, 'function expression')
@@ -97,7 +96,7 @@ def tutorial_function_enter():
         first let's define the operands of the app:
 
         + : Defines a binary sum between operands
-        - : Defines a binary substraction between operands
+        - : Defines a binary subtraction between operands
         * : Defines a binary multiplication between operands
         / : Defines a binary division between operands
         ** : Defines a binary pow between operands in form a ** b (example = x**2)
