@@ -2,7 +2,9 @@
 Main entrance of app and UI logic
 """
 
+from email import message
 import matplotlib.pyplot as plt
+from tkinter import messagebox
 import components as cp
 from app_logic import *
 from general import *
@@ -45,7 +47,8 @@ right_limit = tk.StringVar()
 rectangles_number = tk.StringVar()
 
 # grid control container
-tk.Button(main_area, text="Dont know how to enter function?", width=25, height=1, command=lambda:tutorial_function_enter()).pack()
+tk.Button(main_area, text="Learn how the app works!", width=27, height=1, command=lambda:general_tutorial()).pack(pady=3)
+tk.Button(main_area, text="Dont know how to enter function?", width=27, height=1, command=lambda:tutorial_function_enter()).pack()
 
 main_entry = tk.Entry(main_area, textvariable=function)
 main_entry.insert(0, 'function expression')
@@ -122,6 +125,39 @@ def tutorial_function_enter():
 
     tk.Button(tutorial_window, text="Im ready to use the app!", command=tutorial_window.destroy).pack(pady=10)
 
+def general_tutorial():
+    """
+    Opens a new window explaining the flow of the app
+    """
+    description = """
+        The app works simple: 
+        
+        1. First you need to enter function in the correct format.
+
+        2. Enter into the inputs downside of the function input the
+        lower and upper limit from which you want to calculate the area.
+
+        3. Finally you will have a slider, which slider will work for you to
+        enter the number of rectangles you want to have in the process of
+        calculation of area
+        NOTE: in order to have a small amount of rectangles, you can just 
+        click to the right (and inside) the slider and it will be incrementing
+        by 1 the number of rectangles (instead of by slicing, which increases the
+        number of rectangles in a huge amount)
+
+        4. Click the type of method of calculation you want the app to do and
+        thats it! ;) simple as it is!
+    """
+    
+    tutorial_window = tk.Toplevel(root, background=MAIN_WINDOW_COLOR)
+
+    cp.AppLabelTitle(tutorial_window, text="Tablify - How to use the app? :/", background=MAIN_WINDOW_COLOR, font=('Arial', 15)).pack()
+    cp.AppLabel(tutorial_window, text=description, background=MAIN_WINDOW_COLOR).pack(pady=10)
+
+    tk.Button(tutorial_window, text="I understood, im ready!", command=tutorial_window.destroy).pack(pady=10)
+
+
+
 def get_integral(method : str):
     """
     Main function to solve the equation
@@ -180,8 +216,6 @@ def get_integral(method : str):
             pass
 
         plt.show()
-
-    
     
     rectangles_number_int = int(rectangles_number.get())
     function_str = function.get()
@@ -189,25 +223,29 @@ def get_integral(method : str):
     if not "x" in function_str: # means is a constant function...
         function_str += "+0*x"
     
-    if method == "left":
-        res = get_left_rectangle(function_str, rectangles_number_int, int(left_limit.get()), int(right_limit.get()))
-    elif method == "right":
-        res = get_right_rectangle(function_str, rectangles_number_int, int(left_limit.get()), int(right_limit.get()))
-    elif method == "middle":
-        res = get_middle_rectangle(function_str, rectangles_number_int, int(left_limit.get()), int(right_limit.get()))
-    elif method == "trapezoid":
-        res = get_trapezoid_rectangle(function_str, rectangles_number_int, int(left_limit.get()), int(right_limit.get()))
+    try:
+        if method == "left":
+            res = get_left_rectangle(function_str, rectangles_number_int, int(left_limit.get()), int(right_limit.get()))
+        elif method == "right":
+            res = get_right_rectangle(function_str, rectangles_number_int, int(left_limit.get()), int(right_limit.get()))
+        elif method == "middle":
+            res = get_middle_rectangle(function_str, rectangles_number_int, int(left_limit.get()), int(right_limit.get()))
+        elif method == "trapezoid":
+            res = get_trapezoid_rectangle(function_str, rectangles_number_int, int(left_limit.get()), int(right_limit.get()))
+        
+        clear_res_content()
 
-    print(res)
-    clear_res_content()
+        # result label
+        res_label = cp.AppLabel(res_frame, text=f"Aproximate Area result: {res} cm^2", background=MAIN_WINDOW_COLOR)
+        res_label.pack()
 
-    # result label
-    res_label = cp.AppLabel(res_frame, text=f"Aproximate Area result: {res} cm^2", background=MAIN_WINDOW_COLOR)
-    res_label.pack()
-
-    # render graph
-    show_graph(function_str, method, int(rectangles_number.get()), int(left_limit.get()), int(right_limit.get()))
-
+        # render graph
+        show_graph(function_str, method, int(rectangles_number.get()), int(left_limit.get()), int(right_limit.get()))
+    
+    except Exception as ex:
+        # throw window with error
+        messagebox.showerror("Error on calculation :,(", "There was an error while doing the computer process, check your input and try later!")
+    
 
 def main():
     window_esthetic()

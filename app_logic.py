@@ -21,7 +21,11 @@ OUTPUT 'integral'
 
 def f(x : float, function : str):
     function = function.replace("x", str(x))
-    return eval(function)
+    try:
+        return eval(function)
+    except ZeroDivisionError:
+        return 0 # if its 0, area is not counted
+    
 
 
 def get_left_rectangle(function, rectangles, first_limit, last_limit):
@@ -35,8 +39,6 @@ def get_left_rectangle(function, rectangles, first_limit, last_limit):
         return -1 # invalid base
     
     i = first_limit
-
-
 
     while i < last_limit:
         height = f(i, function)
